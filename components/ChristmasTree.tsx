@@ -59,7 +59,7 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({
                     text-base sm:text-xl
                     ${!isBuilding ? 'char-enter' : 'opacity-0'}
                     ${highlightMode && !isDecoration ? 'hover:bg-yellow-500/20 rounded-sm cursor-pointer scale-110' : 'cursor-default'}
-                    ${isHighlight && highlightMode && !isDecoration ? 'text-yellow-400 font-bold scale-110 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]' : ''}
+                    ${isHighlight && highlightMode && !isDecoration ? 'text-yellow-300 font-bold scale-125 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)] bg-yellow-500/20 rounded-sm border border-yellow-500/50 animate-pulse' : ''}
 
                     ${isHidden && !isDecoration ? 'opacity-10 blur-[1px] scale-75 rotate-12' : 'opacity-100'}
                     ${isActive ? 'text-yellow-300 scale-150 [text-shadow:0_0_15px_#facc15] font-bold z-10 rotate-0' : ''}
