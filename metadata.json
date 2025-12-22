@@ -1,0 +1,7 @@
+{
+  "name": "TextMas Tree (Pixel Edition)",
+  "description": "A minimalist pixel-art Christmas tree generator. Hide secret messages in plain text and share them via URL. Recipients can reveal the hidden message by long-pressing or shaking their device.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

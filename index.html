@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>TextMas Tree - 像素文字圣诞树</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary-green: #4ade80;
+        --accent-yellow: #facc15;
+      }
+      body {
+        background-color: #0f172a;
+        color: #f3f4f6;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        /* 强制全站统一使用 DotGothic16 像素字体 */
+        font-family: 'DotGothic16', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        background-image: 
+          radial-gradient(circle at 50% 50%, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 1) 100%),
+          url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
+      }
+      .pixel-font, .mono-font {
+        font-family: 'DotGothic16', sans-serif !important;
+      }
+      
+      /* 闪烁星空 */
+      @keyframes snow {
+        0% { transform: translateY(-10vh) translateX(0); }
+        100% { transform: translateY(100vh) translateX(20px); }
+      }
+      .snow-particle {
+        position: fixed;
+        top: -10px;
+        background: white;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0.5;
+        z-index: 0;
+        animation: snow linear infinite;
+      }
+
+      @keyframes char-pop {
+        0% { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.2); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      
+      .char-enter {
+        animation: char-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+
+      @keyframes scanline {
+        0% { top: 0%; }
+        100% { top: 100%; }
+      }
+      .scanline::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: rgba(74, 222, 128, 0.2);
+        top: 0;
+        left: 0;
+        animation: scanline 4s linear infinite;
+        pointer-events: none;
+      }
+
+      /* 针对 textarea 的字体强制设置 */
+      textarea, input {
+        font-family: 'DotGothic16', sans-serif !important;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "lz-string": "https://esm.sh/lz-string@^1.5.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="snow-container"></div>
+    <script>
+      const container = document.getElementById('snow-container');
+      for (let i = 0; i < 50; i++) {
+        const snow = document.createElement('div');
+        snow.className = 'snow-particle';
+        snow.style.left = Math.random() * 100 + 'vw';
+        snow.style.width = snow.style.height = Math.random() * 3 + 1 + 'px';
+        snow.style.animationDuration = Math.random() * 5 + 5 + 's';
+        snow.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(snow);
+      }
+    </script>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
