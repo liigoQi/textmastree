@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { TreeData } from '../types';
 import ChristmasTree from './ChristmasTree';
 import PixelButton from './PixelButton';
-import { Sparkles, MousePointer2, Smartphone } from 'lucide-react';
+import { Sparkles, Smartphone } from 'lucide-react';
 
 interface ReceiverProps {
   data: TreeData;
@@ -27,15 +27,6 @@ const Receiver: React.FC<ReceiverProps> = ({ data, onReset }) => {
     <div className="flex flex-col items-center justify-center min-h-[70vh] w-full p-4 gap-12 animate-in fade-in duration-1000">
       <div className="relative group perspective-1000">
         <ChristmasTree data={data} isRevealing={isRevealing} />
-        
-        {/* 交互提示 */}
-        {!hasInteracted && !isRevealing && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-             <div className="bg-black/60 backdrop-blur-md p-6 rounded-full animate-pulse border border-white/20 shadow-2xl">
-                <MousePointer2 className="text-white w-10 h-10" />
-             </div>
-          </div>
-        )}
       </div>
 
       <div className="flex flex-col items-center gap-8 max-w-xs text-center">

@@ -262,7 +262,7 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
 
           <div className="flex justify-center pt-6">
             <PixelButton onClick={handleGenerate} variant="accent" className="w-full sm:w-auto px-16 py-5 shadow-[0_10px_30px_rgba(250,204,21,0.2)]">
-              <span className="flex items-center gap-3 text-base">
+              <span className="flex items-center justify-center gap-3 text-base w-full">
                 <Wand2 size={20} className="animate-pulse" />
                 注入魔法并完成
               </span>
