@@ -92,6 +92,16 @@ const App: React.FC = () => {
         )}
       </main>
 
+      {/* 页脚 */}
+      <footer className="mt-12 pb-8 flex justify-center">
+        <a
+          href="mailto:liiigo@outlook.com"
+          className="pixel-font text-[10px] text-slate-500 hover:text-green-400 transition-colors cursor-pointer"
+        >
+          by Liigo 2025
+        </a>
+      </footer>
+
     </div>
   );
 };
