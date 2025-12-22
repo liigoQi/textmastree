@@ -6,6 +6,7 @@ import { decodeTreeData } from './utils/helpers';
 import { TreeData } from './types';
 // Fix: Add Sparkles to the lucide-react imports
 import { TreePine, Github, Sparkles } from 'lucide-react';
+import { Analytics } from "@vercel/analytics/react"; // TODO: Uncomment after installing @vercel/analytics
 
 const App: React.FC = () => {
   const [treeData, setTreeData] = useState<TreeData | null>(null);
@@ -101,6 +102,9 @@ const App: React.FC = () => {
           by Liigo 2025
         </a>
       </footer>
+
+      {/* Vercel Analytics */}
+      <Analytics /> {/* TODO: Uncomment after installing @vercel/analytics */}
 
     </div>
   );
