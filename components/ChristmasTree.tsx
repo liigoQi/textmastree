@@ -18,7 +18,7 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({
   highlightMode = false,
   isBuilding = false
 }) => {
-  const rows = useMemo(() => buildTreeLayout(data), [data.c, data.t]);
+  const rows = useMemo(() => buildTreeLayout(data), [data.c]);
 
   return (
     <div className={`flex flex-col items-center select-none relative ${isBuilding ? 'scanline' : ''}`}>
@@ -26,7 +26,8 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({
       <div className={`
         mb-2 text-3xl sm:text-4xl transition-all duration-700
         ${isRevealing ? 'scale-150 rotate-[360deg] brightness-125' : 'animate-[twinkle_2s_infinite_ease-in-out]'}
-      `}>
+      `}
+      style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "EmojiSymbols", "Symbola", sans-serif' }}>
         {data.t || '⭐'}
       </div>
 

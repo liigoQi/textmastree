@@ -33,7 +33,10 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
   };
 
   const handleTopperChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData(prev => ({ ...prev, t: e.target.value.slice(0, 1) }));
+    // 获取第一个完整字符（支持emoji）
+    const value = e.target.value;
+    const firstChar = value.length > 0 ? [...value][0] : '';
+    setData(prev => ({ ...prev, t: firstChar }));
   };
 
   const toggleHighlight = (index: number) => {
@@ -213,7 +216,7 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
                 value={data.t}
                 onChange={handleTopperChange}
                 className="w-14 h-14 text-center text-3xl bg-slate-950 border-2 border-slate-800 rounded-xl focus:outline-none focus:border-green-500 transition-all shadow-inner"
-                maxLength={1}
+                style={{ fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "EmojiSymbols", "Symbola", sans-serif' }}
               />
             </div>
 
