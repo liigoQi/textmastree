@@ -28,8 +28,9 @@ const PixelButton: React.FC<PixelButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       className={`
-        relative inline-block px-4 py-2 border-b-4 active:border-b-0 active:translate-y-1 
+        relative inline-block px-4 py-2 border-b-4 active:border-b-0 active:translate-y-1
         transition-all duration-75 uppercase tracking-tighter pixel-font text-[10px] sm:text-xs
+        min-w-[80px] w-auto
         ${variants[variant]}
         ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
         ${className}

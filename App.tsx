@@ -79,9 +79,6 @@ const App: React.FC = () => {
             <h1 className="pixel-font text-base sm:text-xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-500 to-green-600">
               TEXTMAS TREE
             </h1>
-            <p className="text-[9px] pixel-font text-slate-500 uppercase tracking-[0.4em] opacity-60 mt-1">
-              v2.0 像素魔法版
-            </p>
           </div>
         </div>
       </header>
@@ -95,18 +92,6 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* 页脚 */}
-      <footer className="p-10 mt-auto text-center z-10">
-        <div className="w-24 h-1 bg-gradient-to-r from-transparent via-slate-800 to-transparent mx-auto mb-6"></div>
-        <p className="text-[10px] pixel-font text-slate-600 mb-6 uppercase tracking-widest leading-loose">
-          &copy; 2024 TEXTMAS TREE.<br/>由像素艺术与魔法驱动构建.
-        </p>
-        <div className="flex justify-center gap-6 text-slate-500">
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-green-400 transition-all hover:scale-125">
-            <Github size={20} />
-          </a>
-        </div>
-      </footer>
     </div>
   );
 };

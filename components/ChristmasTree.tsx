@@ -18,7 +18,7 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({
   highlightMode = false,
   isBuilding = false
 }) => {
-  const rows = useMemo(() => buildTreeLayout(data), [data]);
+  const rows = useMemo(() => buildTreeLayout(data), [data.c, data.t]);
 
   return (
     <div className={`flex flex-col items-center select-none relative ${isBuilding ? 'scanline' : ''}`}>
@@ -38,8 +38,10 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({
             className="flex leading-tight h-[1.3rem] sm:h-[1.5rem]"
           >
             {row.map((item, colIndex) => {
-              const isActive = isRevealing && item.isHighlight;
-              const isHidden = isRevealing && !item.isHighlight;
+              const isDecoration = item.index === -1; // 装饰物标记
+              const isHighlight = !isDecoration && data.h.includes(item.index); // 动态计算高亮状态
+              const isActive = isRevealing && isHighlight;
+              const isHidden = isRevealing && !isHighlight;
 
               // 构建时的流动效果
               const buildDelay = (rowIndex * 0.1 + colIndex * 0.05).toFixed(2);
@@ -47,23 +49,24 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({
               return (
                 <span
                   key={`${item.index}-${colIndex}`}
-                  onClick={() => highlightMode && onCharClick?.(item.index)}
-                  style={{ 
+                  onClick={() => highlightMode && !isDecoration && onCharClick?.(item.index)}
+                  style={{
                     animationDelay: `${buildDelay}s`,
                     transitionDelay: isRevealing ? `${colIndex * 0.02}s` : '0s'
                   }}
                   className={`
                     w-6 sm:w-7 flex items-center justify-center transition-all duration-500
-                    text-base sm:text-xl cursor-default
+                    text-base sm:text-xl
                     ${!isBuilding ? 'char-enter' : 'opacity-0'}
-                    ${highlightMode ? 'hover:bg-yellow-500/20 rounded-sm cursor-pointer scale-110' : ''}
-                    ${item.isHighlight && highlightMode ? 'text-yellow-400 font-bold scale-110 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]' : ''}
-                    
-                    ${isHidden ? 'opacity-10 blur-[1px] scale-75 rotate-12' : 'opacity-100'}
+                    ${highlightMode && !isDecoration ? 'hover:bg-yellow-500/20 rounded-sm cursor-pointer scale-110' : 'cursor-default'}
+                    ${isHighlight && highlightMode && !isDecoration ? 'text-yellow-400 font-bold scale-110 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]' : ''}
+
+                    ${isHidden && !isDecoration ? 'opacity-10 blur-[1px] scale-75 rotate-12' : 'opacity-100'}
                     ${isActive ? 'text-yellow-300 scale-150 [text-shadow:0_0_15px_#facc15] font-bold z-10 rotate-0' : ''}
-                    ${!isRevealing && !highlightMode ? 'text-green-400 hover:text-green-300' : 'text-slate-400'}
-                    
+                    ${!isRevealing && !highlightMode && !isDecoration ? 'text-green-400 hover:text-green-300' : !isDecoration ? 'text-slate-400' : ''}
+
                     ${isBuilding ? 'animate-[pulse_1s_infinite]' : ''}
+                    ${isDecoration ? `text-yellow-300 scale-110 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)] ${isActive ? 'animate-pulse [text-shadow:0_0_20px_#facc15,0_0_30px_#facc15]' : 'animate-pulse'}` : ''}
                   `}
                 >
                   {item.char}

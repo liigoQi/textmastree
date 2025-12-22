@@ -2,6 +2,16 @@
 import LZString from 'lz-string';
 import { TreeData, TreeChar, TreeRow } from '../types';
 
+// 装饰物emoji列表
+const DECORATION_EMOJIS = ['🎄', '⭐', '❄️', '🌟', '🎁', '🔔', '🎅', '🦌', '⛄', '✨', '🎀', '🕯️'];
+
+/**
+ * 随机获取装饰物emoji
+ */
+const getRandomDecoration = (): string => {
+  return DECORATION_EMOJIS[Math.floor(Math.random() * DECORATION_EMOJIS.length)];
+};
+
 /**
  * 将圣诞树数据编码为 URL 安全的字符串
  */
@@ -53,25 +63,43 @@ export function buildTreeLayout(data: TreeData): TreeRow[] {
   const rows: TreeRow[] = [];
   let charPtr = 0;
   let rowNum = 1;
+  let totalCharsPlaced = 0; // 用于跟踪已放置的总字符数（包括装饰物）
 
   while (charPtr < contentToUse.length) {
     const row: TreeChar[] = [];
     for (let i = 0; i < rowNum; i++) {
       if (charPtr < contentToUse.length) {
         const char = contentToUse[charPtr];
+
+        // 基于位置决定是否添加装饰物（每隔7-10个字符添加一个，且不在第一行）
+        const shouldAddDecoration = rowNum > 1 && (totalCharsPlaced + charPtr) % 9 === 7 && totalCharsPlaced > 5;
+
+        if (shouldAddDecoration && i < rowNum - 1) { // 不在行末添加装饰物
+          // 添加装饰物
+          const decoration = getRandomDecoration();
+          row.push({
+            char: decoration,
+            index: -1, // 装饰物使用-1作为索引，表示不是可高亮的字符
+            isHighlight: false
+          });
+          totalCharsPlaced++;
+        }
+
+        // 添加原始字符
         row.push({
           char,
           index: charPtr,
-          isHighlight: data.h.includes(charPtr)
+          isHighlight: false // 不在构建时设置，由组件动态计算
         });
         charPtr++;
+        totalCharsPlaced++;
       } else {
         break;
       }
     }
     rows.push(row);
     rowNum++;
-    
+
     // 防止无限循环或过大的树
     if (rowNum > 50) break;
   }

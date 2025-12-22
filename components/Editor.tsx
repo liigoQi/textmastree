@@ -4,7 +4,7 @@ import { TreeData } from '../types';
 import ChristmasTree from './ChristmasTree';
 import PixelButton from './PixelButton';
 import { encodeTreeData, copyToClipboard } from '../utils/helpers';
-import { Share2, CheckCircle, Sparkles, AlertCircle, Loader2, Wand2, ExternalLink, Copy, ArrowLeft, MousePointer2 } from 'lucide-react';
+import { Share2, CheckCircle, Sparkles, AlertCircle, Loader2, Wand2, ExternalLink, Copy, ArrowLeft, MousePointer2, Smartphone } from 'lucide-react';
 
 interface EditorProps {
   onGenerate: (url: string) => void;
@@ -37,12 +37,12 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
   };
 
   const toggleHighlight = (index: number) => {
-    // 只有在非生成状态下才允许编辑高亮
-    if (isGenerated) return;
-    
+    // 在预览模式下或生成后不允许编辑高亮
+    if (isRevealingPreview || isGenerated) return;
+
     setData(prev => {
-      const h = prev.h.includes(index) 
-        ? prev.h.filter(i => i !== index) 
+      const h = prev.h.includes(index)
+        ? prev.h.filter(i => i !== index)
         : [...prev.h, index];
       return { ...prev, h };
     });
@@ -106,45 +106,74 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
           onPointerUp={() => isGenerated && setIsRevealingPreview(false)}
           onPointerLeave={() => isGenerated && setIsRevealingPreview(false)}
         >
-          <ChristmasTree 
-            data={data} 
-            // 关键修正：生成后强制关闭 highlightMode 交互，只保留显形效果
-            highlightMode={!isGenerated && highlightMode} 
+          <ChristmasTree
+            data={data}
+            highlightMode={!isGenerated && highlightMode}
             onCharClick={toggleHighlight}
             isRevealing={buildPhase === 'revealing' || isRevealingPreview}
             isBuilding={buildPhase === 'scanning'}
           />
 
-          {isGenerated && !isRevealingPreview && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-in fade-in duration-1000">
-               <div className="bg-black/40 backdrop-blur-sm p-4 rounded-full border border-white/10 shadow-xl">
-                  <MousePointer2 className="text-white w-6 h-6 animate-pulse" />
-               </div>
-            </div>
-          )}
         </div>
 
-        {isGenerated && (
+        {/*{isGenerated && (
           <p className="mt-8 pixel-font text-[9px] text-green-500/60 uppercase tracking-widest animate-pulse">
-            {isRevealingPreview ? '秘密已显现' : '长按预览魔法效果'}
+            {isRevealingPreview ? '灯光已点亮' : '长按预览点亮效果'}
           </p>
-        )}
+        )} */}
 
         {/* 交互提示 (编辑模式) */}
         {!isBuilding && !isGenerated && highlightMode && (
           <div className="mt-8 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl flex items-center gap-3 animate-bounce">
             <Wand2 className="text-yellow-500 w-4 h-4" />
-            <p className="text-xs text-yellow-200 mono-font tracking-wider">点击树上的字，埋下秘密</p>
+            <p className="text-xs text-yellow-200 mono-font tracking-wider">点击树上的字，留下祝福</p>
           </div>
         )}
 
         {isBuilding && (
           <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm flex flex-col items-center justify-center z-50">
             <Loader2 className="w-12 h-12 text-green-500 animate-spin mb-4" />
-            <p className="pixel-font text-xs text-green-400">正在封印秘密...</p>
+            <p className="pixel-font text-xs text-green-400">圣诞树正在生长...</p>
           </div>
         )}
       </section>
+
+      {/* 预览长按按钮 */}
+      {isGenerated && (
+        <section className="w-full flex flex-col items-center gap-6 animate-in slide-in-from-bottom-6 duration-700">
+          <div className="flex flex-col items-center gap-8 max-w-xs text-center">
+            <div
+              onPointerDown={() => setIsRevealingPreview(true)}
+              onPointerUp={() => setIsRevealingPreview(false)}
+              onPointerLeave={() => setIsRevealingPreview(false)}
+              className={`
+                group flex flex-col items-center gap-3 cursor-pointer touch-none select-none
+                p-8 rounded-[2rem] border-2 transition-all duration-500
+                ${isRevealingPreview
+                  ? 'bg-yellow-500 border-yellow-300 scale-95 shadow-[0_0_50px_rgba(234,179,8,0.6)]'
+                  : 'bg-slate-800/50 border-slate-700 hover:border-slate-500 shadow-2xl backdrop-blur-sm'
+                }
+              `}
+            >
+              <div className={`
+                 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300
+                 ${isRevealingPreview ? 'bg-white text-yellow-600 scale-110 rotate-12' : 'bg-slate-700 text-slate-400'}
+              `}>
+                 <Smartphone size={32} className={isRevealingPreview ? 'animate-bounce' : ''} />
+              </div>
+              <div className="space-y-1">
+                <p className={`
+                  pixel-font text-[10px] sm:text-xs uppercase tracking-tighter transition-colors
+                  ${isRevealingPreview ? 'text-black font-bold' : 'text-slate-200 animate-pulse'}
+                `}>
+                  {isRevealingPreview ? '圣诞快乐！' : '长按屏幕点灯'}
+                </p>
+                {!isRevealingPreview && <p className="text-[9px] mono-font text-slate-500 italic">Hidden message inside...</p>}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 结果/分享面板 */}
       {isGenerated ? (
@@ -152,30 +181,18 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
           <div className="bg-slate-800/40 border border-slate-700/50 p-6 rounded-3xl backdrop-blur-md">
             <div className="flex flex-col items-center text-center gap-6">
               <div className="space-y-1">
-                <h3 className="pixel-font text-sm text-green-400">这就是你的成品!</h3>
+                <h3 className="pixel-font text-sm text-green-400">这是独属于你的圣诞树!</h3>
                 <p className="text-slate-500 text-[10px] mono-font uppercase tracking-tighter">复制下方链接分享给你的朋友</p>
               </div>
 
-              <div className="w-full bg-black/60 p-4 rounded-2xl border border-slate-800 flex items-center gap-3">
-                <p className="flex-1 text-[10px] text-green-600/80 mono-font italic truncate">
-                  {generatedUrl}
-                </p>
-                <button 
-                  onClick={handleCopy}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-green-400"
-                >
-                  {copyStatus ? <CheckCircle size={18} className="text-green-500" /> : <Copy size={18} />}
-                </button>
-              </div>
-
               <div className="flex flex-wrap gap-4 w-full">
-                <PixelButton onClick={handleCopy} variant="accent" className="flex-1 py-4 text-sm">
+                <PixelButton onClick={handleCopy} variant="accent" className="flex-1 min-w-[160px] py-4 text-sm">
                   <span className="flex items-center justify-center gap-2">
                     {copyStatus ? <CheckCircle size={16} /> : <Share2 size={16} />}
                     {copyStatus ? '链接已复制' : '复制魔法链接'}
                   </span>
                 </PixelButton>
-                <PixelButton onClick={handleBackToEdit} variant="secondary" className="px-6 py-4">
+                <PixelButton onClick={handleBackToEdit} variant="secondary" className="min-w-[120px] px-6 py-4">
                   <span className="flex items-center justify-center gap-2">
                     <ArrowLeft size={16} />
                     返回编辑
@@ -202,7 +219,7 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
 
             <div className="bg-slate-800/30 p-5 rounded-2xl border border-slate-700/50 flex items-center justify-between hover:border-yellow-500/30 transition-colors">
               <div>
-                <label className="block pixel-font text-[10px] text-slate-500 mb-1 uppercase">秘密埋雷</label>
+                <label className="block pixel-font text-[10px] text-slate-500 mb-1 uppercase">点亮灯光</label>
                 <p className="text-[10px] text-slate-400 mono-font tracking-wide">点选树上的字隐藏惊喜</p>
               </div>
               <button
@@ -237,7 +254,7 @@ const Editor: React.FC<EditorProps> = ({ onGenerate }) => {
                {highlightMode && (
                   <div className="flex items-center gap-2 text-[10px] text-yellow-500 pixel-font animate-pulse">
                      <AlertCircle size={14} />
-                     <span>正在选择秘密字符</span>
+                     <span>正在选择点亮文字</span>
                   </div>
                )}
             </div>
