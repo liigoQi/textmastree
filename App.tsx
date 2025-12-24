@@ -94,12 +94,21 @@ const App: React.FC = () => {
       </main>
 
       {/* 页脚 */}
-      <footer className="mt-12 pb-8 flex justify-center">
+      <footer className="mt-12 pb-8 flex flex-col items-center gap-4">
         <a
           href="mailto:liiigo@outlook.com"
           className="pixel-font text-[10px] text-slate-500 hover:text-green-400 transition-colors cursor-pointer"
         >
           by Liigo 2025
+        </a>
+        <a rel="noopener noreferrer" className="pixel-font text-[10px] text-slate-500">其他好玩 ⬇</a>
+        <a
+          href="https://mosaiclife.skylarksings.cn"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pixel-font text-[10px] text-slate-500 hover:text-green-400 transition-colors cursor-pointer"
+        >
+          生成你的年度元总结
         </a>
       </footer>
 
